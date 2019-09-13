@@ -1,11 +1,11 @@
 class ArticlesController < ActionController::Base
+    before_action :set_article, only: [:edit, :update, :show, :destroy]
 
     def new
         @article = Article.new
     end
 
     def destroy
-        @article = Article.find(params[:id])
         @article.destroy
 
         flash[:notice] = "Article was successfully deleted"
@@ -23,15 +23,12 @@ class ArticlesController < ActionController::Base
     end
 
     def show
-        @article = Article.find(params[:id])
     end
 
     def edit
-        @article = Article.find(params[:id])
     end
 
     def update
-        @article = Article.find(params[:id])
         if @article.update(article_params)
             flash[:notice] = "Article was successfully updated"
             redirect_to article_path(@article)
@@ -45,6 +42,11 @@ class ArticlesController < ActionController::Base
     end
 
     private
+
+        def set_article
+            @article = @article = Article.find(params[:id])
+        end
+
         def article_params
             params.require(:article).permit(:title, :description)
         end
